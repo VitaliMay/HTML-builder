@@ -42,13 +42,13 @@ async function replaceHTML() {
   await fsPr.writeFile(outputFileHtmlPath, templateFile, 'utf-8');
 }
 
-replaceHTML();
+// replaceHTML();
 
 /************************************************** */
 
 async function mergeStyles() {
   try {
-    await fsPr.mkdir(outputDir, { recursive: true });
+    // await fsPr.mkdir(outputDir, { recursive: true });
 
     const filesAll = await fsPr.readdir(stylesDir, { withFileTypes: true });
 
@@ -79,7 +79,7 @@ async function mergeStyles() {
   }
 }
 
-mergeStyles();
+// mergeStyles();
 
 /************************************************** */
 
@@ -106,6 +106,22 @@ async function copyDir(pathOriginal, pathCopy) {
   }
 }
 
-copyDir(assetsDirPath, assetsPathCopy).catch((err) =>
-  console.error('Error copy directory:', err),
-);
+// copyDir(assetsDirPath, assetsPathCopy).catch((err) =>
+//   console.error('Error copy directory:', err),
+// );
+
+/************************************************** */
+
+async function buildPage() {
+  try {
+    await fsPr.mkdir(outputDir, { recursive: true }); // Сначала папка
+
+    await replaceHTML();
+    await mergeStyles();
+    await copyDir(assetsDirPath, assetsPathCopy);
+  } catch (err) {
+    console.error('Error building project:', err);
+  }
+}
+
+buildPage();
