@@ -6,6 +6,11 @@ const { EOL } = require('os');
 
 const createFilePath = path.join(__dirname, 'text.txt');
 
+// добавляет текст
+// const writeStream = fs.createWriteStream(createFilePath, { flags: 'a' });
+// очищает файл
+const writeStream = fs.createWriteStream(createFilePath, { flags: 'w' });
+
 const rl = readline.createInterface({
   input: stdin,
   output: stdout,
@@ -27,7 +32,14 @@ rl.on('line', (input) => {
     return;
   }
 
-  fs.appendFile(createFilePath, `${input}${EOL}`, (err) => {
+  // fs.appendFile(createFilePath, `${input}${EOL}`, (err) => {
+  //   if (err) {
+  //     console.error('Error writing to file', err);
+  //   }
+  // });
+  // Если уж создал writeStream, то лучше его и использовать (хотя appendFile веселее)
+
+  writeStream.write(`${input}${EOL}`, (err) => {
     if (err) {
       console.error('Error writing to file', err);
     }
@@ -38,4 +50,5 @@ rl.on('line', (input) => {
 rl.on('SIGINT', () => {
   stdout.write(`${byeFast}${EOL}`);
   rl.close();
+  writeStream.end();
 });
